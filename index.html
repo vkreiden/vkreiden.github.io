@@ -27,17 +27,26 @@
         <!-- Load d3.js -->
         <script src="https://d3js.org/d3.v5.js"></script>
 
-        <div id="option">
-            <input name="updateButton" type="button" value="Update" onclick="updateData()" />
+        <div id="next">
+            <input name="nextButton" type="button" value="Next" onclick="updateData(1)" />
+        </div>
+
+        <div id="prev">
+            <input name="nextButton" type="button" value="Prev" onclick="updateData(-1)" />
         </div>
 
         <!-- Create a div where the graph will take place -->
         <div id="my_dataviz"></div>
+
         <script>
 
             var svg;
             var div;
-            var data;
+
+            var dataByYear = {};
+            const DS = "ds";
+
+            var curYear = 2010;
 
             // set the dimensions and margins of the graph
             var margin = { top: 20, right: 30, bottom: 40, left: 90 },
@@ -45,9 +54,12 @@
                 height = 400 - margin.top - margin.bottom;
 
 
-            function updateData() {
+            function updateData(offset) {
                 // clean previous content
                 svg.selectAll("*").remove();
+
+                curYear += offset;
+                var data = dataByYear[curYear][DS];
 
                 // Add X axis
                 var x = d3.scaleLinear()
@@ -95,6 +107,23 @@
                     });
             }
 
+            function processData(year, rawData) {
+                data = d3.nest()
+                    .key(function (d) { return d.Ideology; })
+                    .rollup(function (v) { return v.length; })
+                    .entries(rawData);
+
+                //sort bars based on value
+                data = data.sort(function (a, b) {
+                    return d3.descending(a.value, b.value);
+                });
+
+                if (dataByYear[year] == null) {
+                    dataByYear[year] = {};
+                }
+                dataByYear[year][DS] = data;
+            }
+
             async function init() {
                 // Define the div for the tooltip
                 div = d3.select("body").append("div")
@@ -110,18 +139,15 @@
                     .attr("transform",
                         "translate(" + margin.left + "," + margin.top + ")");
 
-                rawData = await d3.csv("data/splc-hate-groups-2019.csv");
-                data = d3.nest()
-                    .key(function (d) { return d.Ideology; })
-                    .rollup(function (v) { return v.length; })
-                    .entries(rawData);
+                // read and process all the years and create appropriate
+                // data structures for further usage
 
-                //sort bars based on value
-                data = data.sort(function (a, b) {
-                    return d3.descending(a.value, b.value);
-                });
+                for (year = 2010; year <= 2019; year++) {
+                    rawData = await d3.csv("data/splc-hate-groups-" + year + ".csv");
+                    processData(year, rawData);
+                }
 
-                updateData();
+                updateData(0);
             }
         </script>
     </body>
