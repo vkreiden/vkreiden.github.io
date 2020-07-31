@@ -27,40 +27,27 @@
         <!-- Load d3.js -->
         <script src="https://d3js.org/d3.v5.js"></script>
 
+        <div id="option">
+            <input name="updateButton" type="button" value="Update" onclick="updateData()" />
+        </div>
+
         <!-- Create a div where the graph will take place -->
         <div id="my_dataviz"></div>
         <script>
 
-            async function init() {
-                // set the dimensions and margins of the graph
-                var margin = { top: 20, right: 30, bottom: 40, left: 90 },
-                    width = 460 - margin.left - margin.right,
-                    height = 400 - margin.top - margin.bottom;
+            var svg;
+            var div;
+            var data;
 
-                // Define the div for the tooltip
-                var div = d3.select("body").append("div")
-                    .attr("class", "tooltip")
-                    .style("opacity", 0);
+            // set the dimensions and margins of the graph
+            var margin = { top: 20, right: 30, bottom: 40, left: 90 },
+                width = 460 - margin.left - margin.right,
+                height = 400 - margin.top - margin.bottom;
 
-                // append the svg object to the body of the page
-                var svg = d3.select("#my_dataviz")
-                    .append("svg")
-                    .attr("width", width + margin.left + margin.right)
-                    .attr("height", height + margin.top + margin.bottom)
-                    .append("g")
-                    .attr("transform",
-                        "translate(" + margin.left + "," + margin.top + ")");
 
-                rawData = await d3.csv("splc-hate-groups-2019.csv");
-                var data = d3.nest()
-                    .key(function (d) { return d.Ideology; })
-                    .rollup(function (v) { return v.length; })
-                    .entries(rawData);
-
-                //sort bars based on value
-                data = data.sort(function (a, b) {
-                    return d3.descending(a.value, b.value);
-                });
+            function updateData() {
+                // clean previous content
+                svg.selectAll("*").remove();
 
                 // Add X axis
                 var x = d3.scaleLinear()
@@ -106,6 +93,35 @@
                             .duration(500)
                             .style("opacity", 0);
                     });
+            }
+
+            async function init() {
+                // Define the div for the tooltip
+                div = d3.select("body").append("div")
+                    .attr("class", "tooltip")
+                    .style("opacity", 0);
+
+                // append the svg object to the body of the page
+                svg = d3.select("#my_dataviz")
+                    .append("svg")
+                    .attr("width", width + margin.left + margin.right)
+                    .attr("height", height + margin.top + margin.bottom)
+                    .append("g")
+                    .attr("transform",
+                        "translate(" + margin.left + "," + margin.top + ")");
+
+                rawData = await d3.csv("splc-hate-groups-2019.csv");
+                data = d3.nest()
+                    .key(function (d) { return d.Ideology; })
+                    .rollup(function (v) { return v.length; })
+                    .entries(rawData);
+
+                //sort bars based on value
+                data = data.sort(function (a, b) {
+                    return d3.descending(a.value, b.value);
+                });
+
+                updateData();
             }
         </script>
     </body>
