@@ -28,11 +28,11 @@
         <script src="https://d3js.org/d3.v5.js"></script>
 
         <div id="next">
-            <input name="nextButton" type="button" value="Next" onclick="updateData(1)" />
+            <input id="nextButton" type="button" value="" onclick="updateData(1)" />
         </div>
 
         <div id="prev">
-            <input name="nextButton" type="button" value="Prev" onclick="updateData(-1)" />
+            <input id="prevButton" type="button" value="" onclick="updateData(-1)" />
         </div>
 
         <!-- Create a div where the graph will take place -->
@@ -59,6 +59,10 @@
                 svg.selectAll("*").remove();
 
                 curYear += offset;
+
+                document.getElementById('prevButton').value = (curYear - 1) + "<";
+                document.getElementById('nextButton').value = ">" + (curYear + 1);
+
                 var data = dataByYear[curYear][DS];
 
                 // Add X axis
