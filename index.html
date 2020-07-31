@@ -110,7 +110,7 @@
                     .attr("transform",
                         "translate(" + margin.left + "," + margin.top + ")");
 
-                rawData = await d3.csv("splc-hate-groups-2019.csv");
+                rawData = await d3.csv("data/splc-hate-groups-2019.csv");
                 data = d3.nest()
                     .key(function (d) { return d.Ideology; })
                     .rollup(function (v) { return v.length; })
