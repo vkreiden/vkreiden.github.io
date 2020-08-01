@@ -28,15 +28,13 @@
         <script src="https://d3js.org/d3.v5.js"></script>
 
         <div id="next">
+            <input id="prevButton" type="button" value="" onclick="updateData(-1)" />
+
             <input id="nextButton" type="button" value="" onclick="updateData(1)" />
         </div>
 
-        <div id="prev">
-            <input id="prevButton" type="button" value="" onclick="updateData(-1)" />
-        </div>
-
         <!-- Create a div where the graph will take place -->
-        <div id="my_dataviz"></div>
+        <div id="dataviz"></div>
 
         <script>
 
@@ -93,7 +91,6 @@
                     .append("rect")
                     .attr("x", x(0))
                     .attr("y", function (d) { return y(d.key); })
-                    .attr("width", function (d) { return x(d.value); })
                     .attr("height", y.bandwidth())
                     .attr("fill", "#69b3a2")
                     .on("mouseover", function (d) {
@@ -108,7 +105,11 @@
                         div.transition()
                             .duration(500)
                             .style("opacity", 0);
-                    });
+                    })
+                    .attr("width", 0)
+                    .transition().duration(3000)
+                    .attr("width", function (d) { return x(d.value); })
+                    ;
             }
 
             function processData(year, rawData) {
@@ -135,7 +136,7 @@
                     .style("opacity", 0);
 
                 // append the svg object to the body of the page
-                svg = d3.select("#my_dataviz")
+                svg = d3.select("#dataviz")
                     .append("svg")
                     .attr("width", width + margin.left + margin.right)
                     .attr("height", height + margin.top + margin.bottom)
