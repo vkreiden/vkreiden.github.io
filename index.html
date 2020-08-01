@@ -48,6 +48,7 @@
         const DS = "ds";
         const TOOLTIP = "tooltip";
         const JUMP = "jump";
+        const PREV = "prev";
 
         const MIN_YEAR = 2010;
         const MAX_YEAR = 2019;
@@ -104,7 +105,10 @@
                 }
             }
 
+            var prevData = {};
             var data = dataByYear[curYear][DS];
+
+            prevData = dataByYear[curYear][PREV];
 
             // Add title
             svg.append("text")
@@ -116,9 +120,17 @@
                 .text("States by Hate Groups Number in " + curYear);
 
             // Add X axis
+            var prevMax = 0;
+            if (curYear > MIN_YEAR) {
+                prevMax = Object.values(prevData).reduce((a, b) => a > b ? a : b);
+            }
+
             var x = d3.scaleLinear()
-                .domain([0, d3.max(data, function (d) { return d.value; })])
+                .domain([0, Math.max(
+                    d3.max(data, function (d) { return d.value; }),
+                    prevMax)])
                 .range([0, width]);
+
             svg.append("g")
                 .attr("transform", "translate(0," + height + ")")
                 .call(d3.axisBottom(x))
@@ -132,10 +144,10 @@
                 .domain(data.map(function (d) {
                     var label = d.key;
 
-                    var j = annotated[label];
-                    if (j != null) {
-                        label = "(+" + j + ")" + label;
-                    }
+                    // var j = annotated[label];
+                    // if (j != null) {
+                    //     label = "(+" + j + ")" + label;
+                    // }
 
                     return label;
                 }))
@@ -165,8 +177,9 @@
                         .duration(500)
                         .style("opacity", 0);
                 })
-                .attr("width", 0)
-                .transition().duration(3000)
+                .attr("width", function (d) { return x((prevData[d.key] == null) ? 0 : prevData[d.key]); })
+                // .attr("width", 0)
+                .transition().duration(5000)
                 .attr("width", function (d) { return x(d.value); })
                 ;
         }
@@ -212,25 +225,26 @@
 
             dataByYear[year][TOOLTIP] = tooltip;
 
+            var prev = new Map();
             var jump = [];
 
             if (year > MIN_YEAR) {
                 // Assuming 2010 -> processing order!!!
                 var prevYearArr = dataByYear[year - 1][DS];
-                var prevYearMap = prevYearArr.reduce(function (map, obj) {
+                prev = prevYearArr.reduce(function (map, obj) {
                     map[obj.key] = obj.value;
                     return map;
                 }, {});
 
                 ds.forEach((datum) => {
-                    var prevValue = (prevYearMap[datum.key] == null) ? 0 : prevYearMap[datum.key];
+                    var prevValue = (prev[datum.key] == null) ? 0 : prev[datum.key];
 
                     jump.push({ state: datum.key, value: (datum.value - prevValue) });
                 });
             };
 
+            dataByYear[year][PREV] = prev;
             dataByYear[year][JUMP] = jump;
-
         }
 
         async function init() {
