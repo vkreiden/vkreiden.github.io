@@ -49,7 +49,10 @@
         const DS = "ds";
         const TOOLTIP = "tooltip";
 
-        var curYear = 2010;
+        const MIN_YEAR = 2010;
+        const MAX_YEAR = 2019;
+
+        var curYear = MIN_YEAR;
 
         // set the dimensions and margins of the graph
         var margin = { top: 20, right: 30, bottom: 40, left: 90 },
@@ -63,8 +66,27 @@
 
             curYear += offset;
 
-            document.getElementById('prevButton').value = (curYear - 1) + "<";
-            document.getElementById('nextButton').value = ">" + (curYear + 1);
+            var prevButton = document.getElementById('prevButton');
+            var nextButton = document.getElementById('nextButton');
+
+            prevButton.value = (curYear - 1) + "<";
+            nextButton.value = ">" + (curYear + 1);
+
+            if (curYear == MIN_YEAR) {
+                prevButton.disabled = true;
+                prevButton.style.visibility = "hidden";
+            } else {
+                prevButton.disabled = false;
+                prevButton.style.visibility = "visible";
+            }
+
+            if (curYear == MAX_YEAR) {
+                nextButton.disabled = true;
+                nextButton.style.visibility = "hidden";
+            } else {
+                nextButton.disabled = false;
+                nextButton.style.visibility = "visible";
+            }
 
             var data = dataByYear[curYear][DS];
 
