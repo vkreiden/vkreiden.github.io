@@ -9,18 +9,19 @@
         height: 280px;
     }
 
+    #dynNarration {
+        padding: 20px 0px 20px 80px;
+    }
+
     #slideshow {
+        /* padding-left: 20px; */
         float: right;
-        /* background: blue; */
         width: 75%;
     }
 
     #control {
-        text-align: left;
-    }
-
-    body {
-        font: 15px Arial;
+        /* text-align: left; */
+        padding-left: 80px;
     }
 
     div.tooltip {
@@ -63,7 +64,7 @@
 
     <div id="parts">
         <div id="narration">
-            <p><i>"...First they came for the socialists, and I did not speak out— <br />
+            <p style="text-align:right"><i>"...First they came for the socialists, and I did not speak out— <br />
                     Because I was not a socialist.<br />
                     Then they came for the trade unionists, and I did not speak out—<br />
                     Because I was not a trade unionist.<br />
@@ -71,9 +72,9 @@
                     Because I was not a Jew.<br />
                     Then they came for me—and there was no one left to speak for me."</i></br>
                 <a href="https://en.wikipedia.org/wiki/First_they_came_...">Martin Niemöller</a>
-                </br></br>
+                </br></br></p>
 
-                Massive protests sparked in the US and around the world in the end of spring, beginning of summer 2020.
+                <p>Massive protests sparked in the US and around the world in the end of spring, beginning of summer 2020.
                 Those came in response to the killing of a black American man
                 <a href="https://en.wikipedia.org/wiki/George_Floyd">George Floyd</a>
                 by a police officer. For many
@@ -103,6 +104,18 @@
                 observed over the last decade.</br /></br />
                 We invite the reader to explore the dynamics with their own eyes and spread the word: it's never too
                 late to #FightTheHate.
+
+            <div id="disclaimer"><i>*This narrative viz is a class assignment project of the Data Visualization class
+                    #MCSDS
+                    track at #UIUC. It's based on the publicly available data from
+                    <a href=" https://www.splcenter.org/hate-map">#SPLC</a>("Download Data" on the left pane).
+                    This is a thematical continuation of the interactive dashboard project
+                    <a
+                        href="https://public.tableau.com/profile/vk1984#!/vizhome/Dashboard_15926061012870/TheStateoftheHateintheUS?publish=yes">The
+                        State of the Hate in the US</a>.
+                </i></div>
+
+
         </div>
 
         <div id="slideshow">
@@ -113,7 +126,9 @@
             <div id="dynNarration"></div>
             <div id="dataviz"></div>
         </div>
+
     </div>
+
 
     <!-- Create a div where the graph will take place -->
 
@@ -150,13 +165,13 @@
 
             if (curYear == MIN_YEAR) {
                 nar +=
-                    "This year we begin our exploration: " + curYear + " is the first year available in the SPLC portal. \
+                    "This is the year we begin our exploration: " + curYear + " is the first year the data are available in the SPLC portal. \
                 The total number of hate groups is " + curTotal + ".";
 
             } else if (curYear == MAX_YEAR) {
                 nar +=
                     "We complete this slideshow journey in " + curYear + " with the intention to continue updating and improving this portal. \
-                The current number of hate groups is " + curTotal + ". Although dropped since 2018 yet high and disturbing. The continuous awareness and action are needed to #FightTheHate!";
+                The current number of hate groups is " + curTotal + ".\nAlthough dropped since 2018 yet high and disturbing. The continuous awareness and action are needed to #FightTheHate!";
 
             } else {
                 prevTotal = dataByYear[curYear - 1][TOTAL];
@@ -224,7 +239,7 @@
             // Add title
             svg.append("text")
                 .attr("x", (width / 2))
-                .attr("y", 0 - ((margin.top - 10) / 2))
+                .attr("y", 0 - ((margin.top - 6) / 2))
                 .attr("text-anchor", "middle")
                 .style("font-size", "16px")
                 .style("text-decoration", "underline")
