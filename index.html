@@ -82,8 +82,8 @@
                 racial
                 injustice in countries and societies. Law enforcement forces are not detached from the communities they
                 live in and serve
-                and their values impacted and relected by the society's.
-                This idea of this connection brought us to take a deeper look into the health of the society value
+                and their values impacted and reflected by the society's.
+                The idea of this connection brought us to take a deeper look into the health of the society values
                 system. And this time
                 we wanted to explore the trend of the extremism in the US and its spread and dynamics across different
                 states.</br /></br />
@@ -273,7 +273,7 @@
                 .call(d3.axisLeft(y))
 
             //Bars
-            svg.selectAll("myRect")
+            svg.selectAll("rect")
                 .data(data)
                 .enter()
                 .append("rect")
@@ -288,6 +288,7 @@
                     div.html(dataByYear[curYear][TOOLTIP][d.key])
                         .style("left", (d3.event.pageX) + "px")
                         .style("top", (d3.event.pageY - 28) + "px");
+                    div.style("text-align", "left");
                 })
                 .on("mouseout", function (d) {
                     div.transition()
