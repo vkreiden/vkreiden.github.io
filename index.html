@@ -2,6 +2,19 @@
 <meta charset="utf-8">
 <style>
     /* set the CSS */
+    #narration {
+        float: left;
+        /* background: Red; */
+        width: 25%;
+        height: 280px;
+    }
+
+    #slideshow {
+        float: right;
+        /* background: blue; */
+        width: 75%;
+    }
+
     body {
         font: 12px Arial;
     }
@@ -35,9 +48,8 @@
 </style>
 
 <head>
-    <title>Page Title</title>
-    <h1>Page Title</h1>
-    <p>This is a paragraph.</p>
+    <title>Dynamics of the Hate Groups Across the US States over the Past Decade</title>
+    <h1>Dynamics of the Hate Groups Across the US States over the Past Decade</h1>
 </head>
 
 <body onload='init()'>
@@ -45,13 +57,41 @@
     <!-- Load d3.js -->
     <script src="https://d3js.org/d3.v5.js"></script>
 
-    <div id="control">
-        <input id="prevButton" type="button" value="" onclick="updateData(-1)" />
-        <input id="nextButton" type="button" value="" onclick="updateData(1)" />
+    <div id="parts">
+        <div id="narration">
+            <p><i>"...First they came for the socialists, and I did not speak out— <br />
+                    Because I was not a socialist.<br />
+                    Then they came for the trade unionists, and I did not speak out—<br />
+                    Because I was not a trade unionist.<br />
+                    Then they came for the Jews, and I did not speak out—<br />
+                    Because I was not a Jew.<br />
+                    Then they came for me—and there was no one left to speak for me."</i></br></br>
+
+                    Massive protests sparked in the US and around the world in the end of spring, beginning of summer 2020.
+                    Those came in response to the killing of a black American man George Floyd by a police officer. For many 
+                    Americans and people around the globe this again raised deep concerns around the structured racism and racial
+                    injustice in countries and societies. Law enforcement forces are not detached from the communities they live in and support
+                    and their values impacted and relected by the society's.
+                    This idea of connection brought us to take a deeper look into the health of the society value system. And this time
+                    we wanted to explore the dynamics of the extremism in the US and its spread and dynamics across different states.</br/>
+
+                    We prepared our interactive exploration based on the publicly available data from SPLC. SPLC is one of the two private NPOs 
+                    monitoring intolerance and hate groups (The other is ADL). <i>"A hate group is a social group that advocates and practices hatred, hostility, or violence towards members of a race, ethnicity, nation, religion, gender, gender identity, sexual orientation or any other designated sector of society"</i> (Wikipedia).
+                    We've found that 75 years after Nuremberg tribunal, a few decades after Civil Rights Movement started the history lessons have not been
+                    learned: the most extremist hate groups publicly operate across the US and no positive trend has been observed over the last decade.
+                    We invite the reader to explore the dynamics with their own eyes and spread the word: it's never too late to #FightTheHate.
+        </div>
+
+        <div id="slideshow">
+            <div id="control">
+                <input id="prevButton" type="button" value="" onclick="updateData(-1)" />
+                <input id="nextButton" type="button" value="" onclick="updateData(1)" />
+            </div>
+            <div id="dataviz"></div>
+        </div>
     </div>
 
     <!-- Create a div where the graph will take place -->
-    <div id="dataviz"></div>
 
     <script>
 
@@ -71,7 +111,7 @@
 
         // set the dimensions and margins of the graph
         var margin = { top: 20, right: 30, bottom: 40, left: 90 },
-            width = 460 - margin.left - margin.right,
+            width = 600 - margin.left - margin.right,
             height = 800 - margin.top - margin.bottom;
 
 
