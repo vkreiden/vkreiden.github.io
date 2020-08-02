@@ -74,7 +74,7 @@
                 <a href="https://en.wikipedia.org/wiki/First_they_came_...">Martin Niemöller</a>
                 </br></br></p>
 
-                <p>Massive protests sparked in the US and around the world in the end of spring, beginning of summer 2020.
+            <p>Massive protests sparked in the US and around the world in the end of spring, beginning of summer 2020.
                 Those came in response to the killing of a black American man
                 <a href="https://en.wikipedia.org/wiki/George_Floyd">George Floyd</a>
                 by a police officer. For many
@@ -285,10 +285,14 @@
                     div.transition()
                         .duration(200)
                         .style("opacity", .9);
-                    div.html(dataByYear[curYear][TOOLTIP][d.key])
+                    t = dataByYear[curYear][TOOLTIP][d.key];
+                    div.html(t)
+                        .style("vertical-align", "middle")
                         .style("left", (d3.event.pageX) + "px")
                         .style("top", (d3.event.pageY - 28) + "px");
-                    div.style("text-align", "left");
+                    div.style("text-align", "left")
+                        .style("vertical-align", "middle")
+                        .style("height", (t.split("<br/>")).length * 14 + "px");
                 })
                 .on("mouseout", function (d) {
                     div.transition()
