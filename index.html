@@ -70,12 +70,12 @@
                     Then they came for the Jews, and I did not speak out—<br />
                     Because I was not a Jew.<br />
                     Then they came for me—and there was no one left to speak for me."</i></br>
-                    <a href="https://en.wikipedia.org/wiki/First_they_came_...">Martin Niemöller</a> 
+                <a href="https://en.wikipedia.org/wiki/First_they_came_...">Martin Niemöller</a>
                 </br></br>
 
                 Massive protests sparked in the US and around the world in the end of spring, beginning of summer 2020.
-                Those came in response to the killing of a black American man 
-                <a href="https://en.wikipedia.org/wiki/George_Floyd">George Floyd</a> 
+                Those came in response to the killing of a black American man
+                <a href="https://en.wikipedia.org/wiki/George_Floyd">George Floyd</a>
                 by a police officer. For many
                 Americans and people around the globe this again raised deep concerns around the structured racism and
                 racial
@@ -87,16 +87,16 @@
                 we wanted to explore the trend of the extremism in the US and its spread and dynamics across different
                 states.</br /></br />
 
-                We prepared our interactive exploration based on the publicly available data from 
+                We prepared our interactive exploration based on the publicly available data from
                 <a href="https://www.splcenter.org">SPLC</a>. The latter is one of
                 the two private NPOs in the US
-                monitoring intolerance and hate groups (The other one is 
+                monitoring intolerance and hate groups (The other one is
                 <a href="https://www.adl.org/">ADL</a>). <i>"A hate group is a social group that
                     advocates and practices hatred, hostility, or violence towards members of a race, ethnicity, nation,
                     religion, gender, gender identity, sexual orientation or any other designated sector of society"</i>
                 (Wikipedia).
-                We've found that 75 years after 
-                <a href="https://en.wikipedia.org/wiki/Nuremberg_trials">Nuremberg trials</a>, a few decades after 
+                We've found that 75 years after
+                <a href="https://en.wikipedia.org/wiki/Nuremberg_trials">Nuremberg trials</a>, a few decades after
                 <a href="https://en.wikipedia.org/wiki/Civil_rights_movement">Civil Rights Movement</a> started,
                 the history lessons have not been
                 learned: the most extremist hate groups publicly operate across the US and no positive trend has been
@@ -107,9 +107,10 @@
 
         <div id="slideshow">
             <div id="control">
-                <input id="prevButton" type="button" value="" onclick="updateData(-1)" />
-                <input id="nextButton" type="button" value="" onclick="updateData(1)" />
+                <input id="prevButton" type="button" value="" onclick="updateView(-1)" />
+                <input id="nextButton" type="button" value="" onclick="updateView(1)" />
             </div>
+            <div id="dynNarration"></div>
             <div id="dataviz"></div>
         </div>
     </div>
@@ -121,11 +122,17 @@
         var svg;
         var div;
 
+        var dynNarration = document.getElementById('dynNarration');
+        var prevButton = document.getElementById('prevButton');
+        var nextButton = document.getElementById('nextButton');
+
+
         var dataByYear = {};
         const DS = "ds";
         const TOOLTIP = "tooltip";
         const JUMP = "jump";
         const PREV = "prev";
+        const TOTAL = "total";
 
         const MIN_YEAR = 2010;
         const MAX_YEAR = 2019;
@@ -137,15 +144,42 @@
             width = 600 - margin.left - margin.right,
             height = 800 - margin.top - margin.bottom;
 
+        function buildDynNarration() {
+            var nar = "";
+            var curTotal = dataByYear[curYear][TOTAL];
 
-        function updateData(offset) {
+            if (curYear == MIN_YEAR) {
+                nar +=
+                    "This year we begin our exploration: " + curYear + " is the first year available in the SPLC portal. \
+                The total number of hate groups is " + curTotal + ".";
+
+            } else if (curYear == MAX_YEAR) {
+                nar +=
+                    "We complete this slideshow journey in " + curYear + " with the intention to continue updating and improving this portal. \
+                The current number of hate groups is " + curTotal + ". Although dropped since 2018 yet high and disturbing. The continuous awareness and action are needed to #FightTheHate!";
+
+            } else {
+                prevTotal = dataByYear[curYear - 1][TOTAL];
+
+                change = ((curTotal - prevTotal) < 0) ? "dropped" : "climbed";
+                level = Math.abs(curTotal - prevTotal) / curTotal < 0.15 ? "slightly" : "significantly";
+
+                nar += "In " + curYear + " the number of the hate groups across the US " + level + " " + change + " to " + curTotal + ".";
+                if (curYear == 2015) {
+                    nar += " From this year the climbing trend continues all the way to 2018.";
+                }
+            }
+
+            return nar;
+        }
+
+        function updateView(offset) {
             // clean previous content
             svg.selectAll("*").remove();
 
             curYear += offset;
 
-            var prevButton = document.getElementById('prevButton');
-            var nextButton = document.getElementById('nextButton');
+            dynNarration.innerText = buildDynNarration();
 
             prevButton.value = (curYear - 1) + "<";
             nextButton.value = ">" + (curYear + 1);
@@ -323,7 +357,7 @@
             var jump = [];
 
             if (year > MIN_YEAR) {
-                // Assuming 2010 -> processing order!!!
+                // Assuming MIN_YEAR -> processing order!!!
                 var prevYearArr = dataByYear[year - 1][DS];
                 prev = prevYearArr.reduce(function (map, obj) {
                     map[obj.key] = obj.value;
@@ -339,6 +373,13 @@
 
             dataByYear[year][PREV] = prev;
             dataByYear[year][JUMP] = jump;
+
+            var total = d3.nest()
+                .rollup(function (v) { return v.length; })
+                .entries(rawData);
+
+            dataByYear[year][TOTAL] = total;
+
         }
 
         async function init() {
@@ -359,12 +400,12 @@
             // read and process all the years and create appropriate
             // data structures for further usage
 
-            for (year = 2010; year <= 2019; year++) {
+            for (year = MIN_YEAR; year <= MAX_YEAR; year++) {
                 rawData = await d3.csv("data/splc-hate-groups-" + year + ".csv");
                 processData(year, rawData);
             }
 
-            updateData(0);
+            updateView(0);
         }
     </script>
 </body>
