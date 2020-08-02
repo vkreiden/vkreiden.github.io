@@ -5,18 +5,22 @@
     #narration {
         float: left;
         /* background: Red; */
-        width: 25%;
+        width: 20%;
         height: 280px;
     }
 
     #slideshow {
         float: right;
         /* background: blue; */
-        width: 75%;
+        width: 80%;
+    }
+
+    #control {
+        text-align: left;
     }
 
     body {
-        font: 12px Arial;
+        font: 15px Arial;
     }
 
     div.tooltip {
@@ -65,21 +69,32 @@
                     Because I was not a trade unionist.<br />
                     Then they came for the Jews, and I did not speak out—<br />
                     Because I was not a Jew.<br />
-                    Then they came for me—and there was no one left to speak for me."</i></br></br>
+                    Then they came for me—and there was no one left to speak for me."</i></br>Martin Niemöller</br></br>
 
-                    Massive protests sparked in the US and around the world in the end of spring, beginning of summer 2020.
-                    Those came in response to the killing of a black American man George Floyd by a police officer. For many 
-                    Americans and people around the globe this again raised deep concerns around the structured racism and racial
-                    injustice in countries and societies. Law enforcement forces are not detached from the communities they live in and support
-                    and their values impacted and relected by the society's.
-                    This idea of connection brought us to take a deeper look into the health of the society value system. And this time
-                    we wanted to explore the dynamics of the extremism in the US and its spread and dynamics across different states.</br/>
+                Massive protests sparked in the US and around the world in the end of spring, beginning of summer 2020.
+                Those came in response to the killing of a black American man George Floyd by a police officer. For many
+                Americans and people around the globe this again raised deep concerns around the structured racism and
+                racial
+                injustice in countries and societies. Law enforcement forces are not detached from the communities they
+                live in and serve
+                and their values impacted and relected by the society's.
+                This idea of this connection brought us to take a deeper look into the health of the society value
+                system. And this time
+                we wanted to explore the trend of the extremism in the US and its spread and dynamics across different
+                states.</br /></br />
 
-                    We prepared our interactive exploration based on the publicly available data from SPLC. SPLC is one of the two private NPOs 
-                    monitoring intolerance and hate groups (The other is ADL). <i>"A hate group is a social group that advocates and practices hatred, hostility, or violence towards members of a race, ethnicity, nation, religion, gender, gender identity, sexual orientation or any other designated sector of society"</i> (Wikipedia).
-                    We've found that 75 years after Nuremberg tribunal, a few decades after Civil Rights Movement started the history lessons have not been
-                    learned: the most extremist hate groups publicly operate across the US and no positive trend has been observed over the last decade.
-                    We invite the reader to explore the dynamics with their own eyes and spread the word: it's never too late to #FightTheHate.
+                We prepared our interactive exploration based on the publicly available data from SPLC. SPLC is one of
+                the two private NPOs
+                monitoring intolerance and hate groups (The other is ADL). <i>"A hate group is a social group that
+                    advocates and practices hatred, hostility, or violence towards members of a race, ethnicity, nation,
+                    religion, gender, gender identity, sexual orientation or any other designated sector of society"</i>
+                (Wikipedia).
+                We've found that 75 years after Nuremberg tribunal, a few decades after Civil Rights Movement started
+                the history lessons have not been
+                learned: the most extremist hate groups publicly operate across the US and no positive trend has been
+                observed over the last decade.</br /></br />
+                We invite the reader to explore the dynamics with their own eyes and spread the word: it's never too
+                late to #FightTheHate.
         </div>
 
         <div id="slideshow">
@@ -223,7 +238,6 @@
                         .style("opacity", 0);
                 })
                 .attr("width", function (d) { return x((prevData[d.key] == null) ? 0 : prevData[d.key]); })
-                // .attr("width", 0)
                 .transition().duration(5000)
                 .attr("width", function (d) { return x(d.value); });
 
@@ -233,7 +247,7 @@
                 .enter()
                 .append("text")
                 .attr("class", "label")
-                .attr("y", (function (d) { return y(d.key) + 10; }))
+                .attr("y", (function (d) { return y(d.key) + 12; }))
                 .attr("x", function (d) { return x(d.value) - 20; })
                 .attr("dx", ".75em")
                 .text(function (d) { return d.value; });
@@ -250,8 +264,8 @@
                 .enter()
                 .append("text")
                 .attr("class", "annotation")
-                .attr("y", (function (d) { return y(d.key) + 10; }))
-                .attr("x", function (d) { return x(mapData[d.key]) + 20; })
+                .attr("y", (function (d) { return y(d.key) + 12; }))
+                .attr("x", function (d) { return x(mapData[d.key]) + 5; })
                 .attr("dx", ".75em")
                 .text(function (d) { return "+" + d.value; });
         }
